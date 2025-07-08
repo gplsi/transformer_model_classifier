@@ -1,0 +1,13 @@
+transformers
+pandas
+tqdm
+matplotlib
+wandb
+pyyaml
+plotly
+torch
+dotenv
+scikit-learn
+datasets
+tensorboardX
+accelerate
