@@ -4,13 +4,15 @@
     "wandb_project": "comment_const_active_learning",
     "best_result_config": "",
     "train_file": "/data/constructividad/train.tsv",
-    "test_file": "/data/constructividad/test.tsv",
+    "test_file": "",
     "output_dir": "comment_const_1",
+    "eval_file": "",
+    "eval_size": 0.1,
+    "test_size": 0.2,
     "label": "CONST",
     "filter_label": "",
     "filter_label_value": "",
     "features_name": [],
-    "two_text": false,
     "name_text_columns": ["text"],
     "max_length": 256
 }

@@ -2,7 +2,7 @@
 #SBATCH --job-name=fine_tuning
 #SBATCH --output=%j.out         # Nombre del archivo de salida
 #SBATCH --error=%j.err          # Nombre del archivo de error
-#SBATCH --partition=titan
+#SBATCH --partition=postiguet1
 #SBATCH --gres=gpu:1
 #SBATCH --mem=32GB
 #SBATCH --nodes=1

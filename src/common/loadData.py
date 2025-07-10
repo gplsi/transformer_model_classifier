@@ -52,6 +52,9 @@ def load_all_data(file_in, labels_to_exclude, label, filter_label, filter_label_
             df_in = df_in[df_in[filter_label] == filter_label_value]
         print(df_in[label].value_counts())
         labels = df_in[label]
+    else:
+        print("Label not found in the DataFrame. Using default labels.")
+        labels = [0] * len(df_in)
     features = []
     if feature_name is not None:
         for index, row in df_in.iterrows():
