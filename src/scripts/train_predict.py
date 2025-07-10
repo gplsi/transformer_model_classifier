@@ -41,6 +41,7 @@ def main(parser):
     labels = list(df_train['labels'].unique())
         
     if training_args["do_train"]:
+        training_args["output_dir"] = os.path.join("models", general_args["output_dir"]) 
         if training_args["do_eval"]:
             if general_args["eval_file"] != "":
                 df_eval = load_all_data(general_args["eval_file"], label_to_exclude, general_args["label"],
