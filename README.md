@@ -1,6 +1,12 @@
 # transformer_model_classifier
 
-## Run training script
+## Run training script in local environment
+
+To run the training script, you need to have Python installed along with the required libraries. You can install the necessary libraries using pip:
+```bash
+pip install -r requirements.txt
+```
+To run the training script, use the following command:
 ```bash
 python -m src.scripts.train_predict --config_path /config/constructividad/comment.json --model_arg /config/constructividad/comment_model.json
 ```
@@ -50,4 +56,20 @@ Use the same hyperparameters of TrainingArguments. Follow the example below to c
       "no_cuda": true
     }
 ```
+## Runing on Slurm
+To run the training script on a Slurm cluster, you can use the provided Slurm script. Make sure to adjust the parameters according to your cluster's configuration and your specific requirements.
 
+Before running the script, ensure that you have the necessary environment set up, including the required Python packages and any dependencies.
+For example, you can create a conda environment and install the required packages:
+```bash
+conda create -n fine_tuning python=3.12
+conda activate fine_tuning
+pip install -r requirements.txt
+```
+
+Then, you can submit the Slurm job using the following command:
+
+
+```bash
+sbatch conda_one_node_slurm
+```
