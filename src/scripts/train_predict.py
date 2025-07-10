@@ -6,11 +6,14 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 from dotenv import load_dotenv
 from datasets import Dataset, DatasetDict
+from sklearn.utils.class_weight import compute_class_weight
+import numpy as np
 
 from src.common.loadData import load_all_data
 from src.common.score import scorePredict
 from src.model.classification_model import ClassificationModel
 from src.common.utils import set_seed
+
 
 
 load_dotenv(".env")
@@ -65,6 +68,14 @@ def main(parser):
             "validation": Dataset.from_pandas(df_eval) if training_args["do_eval"] else None,
             "test": Dataset.from_pandas(df_test) if training_args["do_predict"] else None
         })
+        
+        if "class_weights" in general_args:
+            weights = compute_class_weight(class_weight="balanced", classes=np.unique(df_train['labels'].values),
+                                           y=df_train['labels'].values)
+            
+            general_args["class_weights"] = weights.tolist()
+            # weights_str = [str(numero) for numero in weights.tolist()]
+        
         model = ClassificationModel(model_name, training_args, dataset_dict, general_args)
         model.train()
     else:

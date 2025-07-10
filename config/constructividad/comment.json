@@ -14,5 +14,6 @@
     "filter_label_value": "",
     "features_name": [],
     "name_text_columns": ["text"],
-    "max_length": 256
+    "max_length": 256,
+    "class_weights": []
 }
