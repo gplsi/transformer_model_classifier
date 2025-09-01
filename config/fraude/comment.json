@@ -1,0 +1,19 @@
+{
+    "model_type": "salamandra",
+    "model_name": "BSC-LT/salamandra-2b",
+    "WANDB_PROJECT": "comment_fraude_fine-tuning",
+    "WANDB_LOG_MODEL": "checkpoint",
+    "best_result_config": "",
+    "train_file": "/data/fraude/train.tsv",
+    "test_file": "/data/fraude/test.tsv",
+    "output_dir": "comment_fraude_1",
+    "eval_file": "",
+    "eval_size": 0.1,
+    "label": "label",
+    "filter_label": "",
+    "filter_label_value": "",
+    "features_name": [],
+    "name_text_columns": ["text"],
+    "max_length": 512,
+    "class_weights": []
+}

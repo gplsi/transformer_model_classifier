@@ -62,8 +62,8 @@ To run the training script on a Slurm cluster, you can use the provided Slurm sc
 Before running the script, ensure that you have the necessary environment set up, including the required Python packages and any dependencies.
 For example, you can create a conda environment and install the required packages:
 ```bash
-conda create -n fine_tuning python=3.12
-conda activate fine_tuning
+conda create -n fine-tuning python=3.12
+conda activate fine-tuning
 pip install -r requirements.txt
 ```
 
@@ -71,5 +71,5 @@ Then, you can submit the Slurm job using the following command:
 
 
 ```bash
-sbatch conda_one_node_slurm
+sbatch conda_one_node.slurm
 ```

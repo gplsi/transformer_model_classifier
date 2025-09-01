@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 from datasets import Dataset, DatasetDict
 from sklearn.utils.class_weight import compute_class_weight
 import numpy as np
+import wandb
+
 
 from src.common.loadData import load_all_data
 from src.common.score import scorePredict
@@ -28,6 +30,7 @@ def main(parser):
 
     with open(os.getcwd() + config_path) as f:
         general_args = json.load(f)
+        
     df_model_args = pd.read_json(os.getcwd() + model_arg)
     training_args = df_model_args.to_dict(orient='records')[0]
     model_name = general_args["model_name"]
@@ -45,6 +48,13 @@ def main(parser):
         
     if training_args["do_train"]:
         training_args["output_dir"] = os.path.join("models", general_args["output_dir"]) 
+        
+        # Configure W&B if the project name is provided
+        if "WANDB_PROJECT" in general_args:
+            os.environ["WANDB_PROJECT"] = general_args["WANDB_PROJECT"]  # name your W&B project
+            os.environ["WANDB_LOG_MODEL"] = general_args["WANDB_LOG_MODEL"]  # log all model checkpoints
+            wandb.login()
+        
         if training_args["do_eval"]:
             if general_args["eval_file"] != "":
                 df_eval = load_all_data(general_args["eval_file"], label_to_exclude, general_args["label"],
@@ -70,8 +80,20 @@ def main(parser):
         })
         
         if "class_weights" in general_args:
+            # df_train = df_train.dropna(subset=['labels'])
+            # print(f"[INFO] Tamaño original del dataset de entrenamiento: {len(df_train)}")
+
+            # df_train = df_train.dropna(subset=["labels"])
+            # df_train["labels"] = df_train["labels"].astype(int)  # asegurar que son enteros
+
+            # print(f"[INFO] Tamaño después de eliminar NaN en labels: {len(df_train)}")
+            # print(f"[INFO] Clases únicas en labels: {np.unique(df_train['labels'].values)}")
             weights = compute_class_weight(class_weight="balanced", classes=np.unique(df_train['labels'].values),
                                            y=df_train['labels'].values)
+
+            print("Clases únicas:", np.unique(df_train['labels'].values))
+            print("Peso por clase:", weights)
+
             
             general_args["class_weights"] = weights.tolist()
             # weights_str = [str(numero) for numero in weights.tolist()]

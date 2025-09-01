@@ -1,4 +1,4 @@
-from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer
+from transformers import AutoConfig, AutoModelForSequenceClassification, TrainingArguments, Trainer
 from transformers import AutoTokenizer, DataCollatorWithPadding
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
@@ -36,16 +36,30 @@ class WeightedLossTrainer(Trainer):
 class ClassificationModel:
     def __init__(self, model_id, training_args, dataset_dict, general_args):
         self.tokenizer = AutoTokenizer.from_pretrained(model_id)
-        self.model = AutoModelForSequenceClassification.from_pretrained(
-            model_id, num_labels=2
-        )
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
         self.label_encoder = None
-        self.class_weights = torch.Tensor(general_args["class_weights"])
-        self.training_args = TrainingArguments(**training_args)
         self.general_args = general_args
         self.tokenized_datasets = dataset_dict.map(
             self.preprocessing_function, batched=True
         )
+        
+        self.class_weights = torch.Tensor(general_args["class_weights"])
+        config = AutoConfig.from_pretrained(model_id, pad_token_id=self.tokenizer.pad_token_id)
+        if self.label_encoder:
+            config.num_labels = len(self.label_encoder.classes_)
+        if "dropout_rate" in training_args:
+            config.hidden_dropout_prob = training_args["dropout_rate"]
+            config.attention_probs_dropout_prob = training_args["dropout_rate"]
+            training_args.pop("dropout_rate")
+         
+        self.training_args = TrainingArguments(**training_args)
+        
+        self.model = AutoModelForSequenceClassification.from_pretrained(
+            model_id, config=config
+        )
+        print(self.tokenized_datasets["train"])
+        
         self.data_collator = DataCollatorWithPadding(tokenizer=self.tokenizer)
         self.trainer = None
 
@@ -74,7 +88,7 @@ class ClassificationModel:
                 truncation=True,
             )
 
-        encoded["label"] = self.label_encoding(examples)
+        encoded["labels"] = self.label_encoding(examples)
         return encoded
 
     def train(self):

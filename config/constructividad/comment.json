@@ -1,7 +1,8 @@
 {
     "model_type": "roberta",
     "model_name": "PlanTL-GOB-ES/roberta-base-bne",
-    "wandb_project": "comment_const_active_learning",
+    "WANDB_PROJECT": "comment_const_fine-tuning",
+    "WANDB_LOG_MODEL": "checkpoint",
     "best_result_config": "",
     "train_file": "/data/constructividad/train.tsv",
     "test_file": "",
